@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mini Games Suite</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{--bg:#f5f5f7;--white:#fff;--text:#1d1d1f;--text2:#6e6e73;--text3:#aeaeb2;--accent:#0071e3;--accent-light:#e8f0fe;--border:rgba(0,0,0,0.08);--radius:18px;}
+body{font-family:'Inter',-apple-system,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;-webkit-font-smoothing:antialiased;padding:20px;}
+h1{font-size:22px;font-weight:700;letter-spacing:-.5px;margin-bottom:4px;}
+.sub{font-size:13px;color:var(--text2);margin-bottom:20px;}
+.tabs{display:flex;gap:6px;margin-bottom:20px;}
+.tab{padding:8px 16px;border-radius:20px;border:none;font-size:13px;font-weight:500;font-family:inherit;cursor:pointer;background:var(--white);color:var(--text2);border:1px solid var(--border);transition:all .15s;}
+.tab.active{background:var(--accent);color:#fff;border-color:transparent;}
+.game{display:none;}
+.game.active{display:block;}
+.card{background:var(--white);border-radius:var(--radius);border:1px solid var(--border);box-shadow:0 2px 0 rgba(0,0,0,.03),0 12px 36px rgba(0,0,0,.07);padding:24px;}
+.score-row{display:flex;gap:12px;margin-bottom:16px;}
+.sc{background:var(--bg);border-radius:10px;padding:10px 16px;font-size:12px;font-weight:600;}
+.sc span{font-size:18px;font-weight:700;color:var(--accent);display:block;}
+.btn{padding:10px 20px;background:var(--accent);color:#fff;border:none;border-radius:10px;font-size:13px;font-weight:600;font-family:inherit;cursor:pointer;transition:all .2s;}
+.btn:hover{background:#0077ed;transform:translateY(-1px);}
+.btn-sm{padding:7px 14px;font-size:12px;}
+/* Memory */
+.mem-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:16px;}
+.mem-card{aspect-ratio:1;border-radius:10px;border:none;font-size:26px;cursor:pointer;background:var(--accent);color:transparent;transition:all .25s;display:flex;align-items:center;justify-content:center;}
+.mem-card.flipped{background:var(--white);color:var(--text);border:2px solid var(--border);}
+.mem-card.matched{background:#dafbe1;color:var(--text);border:2px solid #1a7f37;cursor:default;}
+/* Reaction */
+.reaction-box{border-radius:16px;height:180px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;transition:background .1s;user-select:none;margin-bottom:14px;gap:8px;}
+.reaction-msg{font-size:20px;font-weight:700;color:#fff;}
+.reaction-sub{font-size:14px;color:rgba(255,255,255,.8);}
+/* Number Puzzle */
+.puzzle-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;max-width:280px;margin:0 auto 16px;}
+.puzzle-tile{aspect-ratio:1;border-radius:10px;border:none;font-size:18px;font-weight:700;font-family:inherit;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;}
+.puzzle-tile.num{background:var(--accent);color:#fff;}
+.puzzle-tile.num:hover{background:#0077ed;transform:scale(1.05);}
+.puzzle-tile.empty{background:var(--bg);cursor:default;}
+</style>
+</head>
+<body>
+<h1>🎮 Mini Games Suite</h1>
+<p class="sub">Three browser games — no frameworks, pure JavaScript.</p>
+<div class="tabs">
+  <button class="tab active" onclick="switchTab('memory',this)">🃏 Memory Match</button>
+  <button class="tab" onclick="switchTab('reaction',this)">⚡ Reaction Test</button>
+  <button class="tab" onclick="switchTab('puzzle',this)">🔢 Slide Puzzle</button>
+</div>
+
+<!-- MEMORY MATCH -->
+<div class="game active" id="memory">
+  <div class="card">
+    <div class="score-row">
+      <div class="sc">Moves <span id="m-moves">0</span></div>
+      <div class="sc">Pairs <span id="m-pairs">0/8</span></div>
+      <div class="sc">Time <span id="m-time">0s</span></div>
+    </div>
+    <div class="mem-grid" id="mem-grid"></div>
+    <button class="btn btn-sm" onclick="initMemory()">↺ New Game</button>
+  </div>
+</div>
+
+<!-- REACTION TEST -->
+<div class="game" id="reaction">
+  <div class="card">
+    <div class="score-row">
+      <div class="sc">Last <span id="r-last">—</span></div>
+      <div class="sc">Best <span id="r-best">—</span></div>
+      <div class="sc">Avg <span id="r-avg">—</span></div>
+    </div>
+    <div class="reaction-box" id="r-box" onclick="reactionClick()" style="background:#636366;">
+      <div class="reaction-msg" id="r-msg">Click to Start</div>
+      <div class="reaction-sub" id="r-sub">Test your reaction time</div>
+    </div>
+    <div id="r-history" style="font-size:12px;color:var(--text2);"></div>
+  </div>
+</div>
+
+<!-- SLIDE PUZZLE -->
+<div class="game" id="puzzle">
+  <div class="card">
+    <div class="score-row">
+      <div class="sc">Moves <span id="p-moves">0</span></div>
+      <div class="sc">Status <span id="p-status" style="font-size:13px;color:var(--text2);">Solving</span></div>
+    </div>
+    <div class="puzzle-grid" id="puzzle-grid"></div>
+    <button class="btn btn-sm" onclick="initPuzzle()">↺ Shuffle</button>
+  </div>
+</div>
+
+<script>
+function switchTab(name, el) {
+  document.querySelectorAll('.game').forEach(g => g.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById(name).classList.add('active');
+  el.classList.add('active');
+}
+
+/* ── MEMORY MATCH ── */
+const EMOJIS = ['🍕','🚀','🎸','🦊','🌈','🍦','🎯','🏆'];
+let mFlipped=[], mMatched=new Set(), mMoves=0, mTimer=null, mSecs=0, mLock=false;
+
+function initMemory() {
+  clearInterval(mTimer); mFlipped=[]; mMatched=new Set(); mMoves=0; mSecs=0; mLock=false;
+  document.getElementById('m-moves').textContent=0;
+  document.getElementById('m-pairs').textContent='0/8';
+  document.getElementById('m-time').textContent='0s';
+  const cards=[...EMOJIS,...EMOJIS].sort(()=>Math.random()-.5);
+  const grid=document.getElementById('mem-grid');
+  grid.innerHTML='';
+  cards.forEach((e,i)=>{
+    const btn=document.createElement('button');
+    btn.className='mem-card'; btn.dataset.emoji=e; btn.dataset.idx=i;
+    btn.textContent=e; btn.onclick=()=>flipCard(btn);
+    grid.appendChild(btn);
+  });
+  mTimer=setInterval(()=>{mSecs++;document.getElementById('m-time').textContent=mSecs+'s';},1000);
+}
+
+function flipCard(btn) {
+  if(mLock||btn.classList.contains('flipped')||btn.classList.contains('matched')) return;
+  btn.classList.add('flipped');
+  mFlipped.push(btn);
+  if(mFlipped.length===2){
+    mLock=true; mMoves++;
+    document.getElementById('m-moves').textContent=mMoves;
+    if(mFlipped[0].dataset.emoji===mFlipped[1].dataset.emoji){
+      mFlipped.forEach(b=>b.classList.add('matched'));
+      mMatched.add(mFlipped[0].dataset.emoji);
+      document.getElementById('m-pairs').textContent=mMatched.size+'/8';
+      mFlipped=[]; mLock=false;
+      if(mMatched.size===8){clearInterval(mTimer);document.getElementById('p-status');}
+    } else {
+      setTimeout(()=>{mFlipped.forEach(b=>b.classList.remove('flipped'));mFlipped=[];mLock=false;},800);
+    }
+  }
+}
+
+/* ── REACTION TEST ── */
+let rState='idle', rTimer=null, rStart=0, rTimes=[], rBest=Infinity;
+const rBox=document.getElementById('r-box');
+const rMsg=document.getElementById('r-msg');
+const rSub=document.getElementById('r-sub');
+
+function reactionClick(){
+  if(rState==='idle'){
+    rState='waiting';
+    rBox.style.background='#ff9f0a';
+    rMsg.textContent='Wait...';
+    rSub.textContent='Click when it turns green!';
+    const delay=1500+Math.random()*2500;
+    rTimer=setTimeout(()=>{
+      rState='ready'; rStart=Date.now();
+      rBox.style.background='#1a7f37';
+      rMsg.textContent='NOW!';
+      rSub.textContent='Click!';
+    },delay);
+  } else if(rState==='waiting'){
+    clearTimeout(rTimer); rState='idle';
+    rBox.style.background='#d93025';
+    rMsg.textContent='Too early!';
+    rSub.textContent='Wait for green. Click to try again.';
+    setTimeout(()=>{rBox.style.background='#636366';rMsg.textContent='Click to Start';rSub.textContent='Test your reaction time';},1200);
+  } else if(rState==='ready'){
+    const t=Date.now()-rStart; rState='idle';
+    rTimes.push(t);
+    if(t<rBest) rBest=t;
+    const avg=Math.round(rTimes.reduce((a,b)=>a+b,0)/rTimes.length);
+    document.getElementById('r-last').textContent=t+'ms';
+    document.getElementById('r-best').textContent=rBest+'ms';
+    document.getElementById('r-avg').textContent=avg+'ms';
+    const grade=t<200?'🏆 Superhuman':t<300?'⚡ Excellent':t<400?'👍 Good':t<600?'🙂 Average':'😅 Keep trying';
+    rBox.style.background='#0071e3';
+    rMsg.textContent=t+'ms';
+    rSub.textContent=grade+' · Click to go again';
+    document.getElementById('r-history').textContent='Last '+Math.min(rTimes.length,5)+' attempts: '+rTimes.slice(-5).join('ms, ')+'ms';
+  }
+}
+
+/* ── SLIDE PUZZLE ── */
+let pTiles=[], pMoves=0;
+function initPuzzle(){
+  pMoves=0; document.getElementById('p-moves').textContent=0;
+  document.getElementById('p-status').textContent='Solving';
+  document.getElementById('p-status').style.color='var(--text2)';
+  pTiles=[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,0];
+  // Shuffle with valid moves
+  for(let i=0;i<200;i++){
+    const z=pTiles.indexOf(0);
+    const moves=[];
+    if(z%4!==0) moves.push(z-1);
+    if(z%4!==3) moves.push(z+1);
+    if(z>=4) moves.push(z-4);
+    if(z<12) moves.push(z+4);
+    const swap=moves[Math.floor(Math.random()*moves.length)];
+    [pTiles[z],pTiles[swap]]=[pTiles[swap],pTiles[z]];
+  }
+  renderPuzzle();
+}
+
+function renderPuzzle(){
+  const grid=document.getElementById('puzzle-grid');
+  grid.innerHTML='';
+  pTiles.forEach((v,i)=>{
+    const btn=document.createElement('button');
+    btn.className='puzzle-tile '+(v===0?'empty':'num');
+    btn.textContent=v===0?'':v;
+    if(v!==0) btn.onclick=()=>moveTile(i);
+    grid.appendChild(btn);
+  });
+}
+
+function moveTile(idx){
+  const z=pTiles.indexOf(0);
+  const valid=(idx===z-1&&idx%4!==3)||(idx===z+1&&idx%4!==0)||idx===z-4||idx===z+4;
+  if(!valid) return;
+  [pTiles[z],pTiles[idx]]=[pTiles[idx],pTiles[z]];
+  pMoves++; document.getElementById('p-moves').textContent=pMoves;
+  renderPuzzle();
+  if(pTiles.every((v,i)=>v===(i===15?0:i+1))){
+    document.getElementById('p-status').textContent='Solved! 🎉';
+    document.getElementById('p-status').style.color='#1a7f37';
+  }
+}
+
+initMemory(); initPuzzle();
+</script>
+</body>
+</html>

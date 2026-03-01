@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Power Platform Automation</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{--bg:#f5f5f7;--white:#fff;--text:#1d1d1f;--text2:#6e6e73;--text3:#aeaeb2;--accent:#0071e3;--accent-light:#e8f0fe;--border:rgba(0,0,0,0.08);--radius:18px;--ms:#00a4ef;}
+body{font-family:'Inter',-apple-system,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;-webkit-font-smoothing:antialiased;padding:0;}
+/* Hero strip */
+.hero{background:linear-gradient(135deg,#0067b8,#00a4ef);padding:32px;color:#fff;}
+.hero-badge{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:rgba(255,255,255,.7);margin-bottom:10px;}
+.hero h1{font-size:24px;font-weight:700;letter-spacing:-.5px;margin-bottom:6px;}
+.hero p{font-size:14px;font-weight:300;color:rgba(255,255,255,.8);line-height:1.65;max-width:520px;}
+.tools-row{display:flex;gap:8px;margin-top:16px;flex-wrap:wrap;}
+.tool-badge{padding:5px 12px;background:rgba(255,255,255,.15);border-radius:20px;font-size:12px;font-weight:600;color:#fff;backdrop-filter:blur(10px);}
+/* Stats */
+.kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);}
+.kpi{background:var(--white);padding:20px;text-align:center;}
+.kpi .n{font-size:32px;font-weight:700;letter-spacing:-1.5px;color:var(--accent);}
+.kpi .d{font-size:11px;color:var(--text2);font-weight:500;text-transform:uppercase;letter-spacing:.05em;margin-top:3px;}
+/* Section */
+.sec{padding:28px;}
+.sec-title{font-size:16px;font-weight:700;letter-spacing:-.3px;margin-bottom:4px;}
+.sec-sub{font-size:13px;color:var(--text2);margin-bottom:18px;}
+/* Flow diagram */
+.flow{display:flex;align-items:center;gap:0;overflow-x:auto;padding-bottom:8px;}
+.flow-step{flex-shrink:0;background:var(--white);border-radius:12px;border:1px solid var(--border);padding:14px 16px;min-width:110px;text-align:center;position:relative;}
+.flow-step .step-icon{font-size:24px;margin-bottom:6px;}
+.flow-step .step-name{font-size:11px;font-weight:600;color:var(--text);}
+.flow-step .step-tool{font-size:10px;color:var(--text3);margin-top:2px;}
+.flow-arrow{color:var(--text3);font-size:20px;margin:0 4px;flex-shrink:0;}
+.flow-step.trigger{border-color:#00a4ef;background:#e3f5fd;}
+.flow-step.action{border-color:#742774;background:#f5e3f5;}
+.flow-step.output{border-color:#1a7f37;background:#dafbe1;}
+/* Demo simulation */
+.demo-card{background:var(--white);border-radius:var(--radius);border:1px solid var(--border);overflow:hidden;}
+.demo-head{padding:14px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;font-size:13px;font-weight:600;}
+.demo-body{padding:18px;}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;}
+.field{display:flex;flex-direction:column;gap:4px;}
+label.lbl{font-size:12px;font-weight:500;color:var(--text2);}
+input,select{font-family:inherit;font-size:13px;padding:9px 12px;border-radius:10px;border:1.5px solid var(--border);background:var(--bg);color:var(--text);outline:none;width:100%;}
+input:focus,select:focus{border-color:var(--accent);}
+.submit-btn{width:100%;padding:12px;background:var(--accent);color:#fff;border:none;border-radius:10px;font-size:13px;font-weight:600;font-family:inherit;cursor:pointer;transition:all .2s;margin-top:4px;}
+.submit-btn:hover{background:#0077ed;}
+.log{margin-top:16px;background:var(--bg);border-radius:10px;padding:14px;font-size:12px;line-height:1.8;}
+.log-item{display:flex;align-items:flex-start;gap:8px;}
+.log-icon{flex-shrink:0;}
+.log-text{color:var(--text2);}
+.log-text strong{color:var(--text);}
+.log-item.new{animation:slideIn .4s ease;}
+@keyframes slideIn{from{opacity:0;transform:translateY(-6px);}to{opacity:1;transform:translateY(0);}}
+/* Benefits */
+.benefits{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.benefit{background:var(--white);border-radius:12px;border:1px solid var(--border);padding:16px;}
+.benefit .b-icon{font-size:22px;margin-bottom:8px;}
+.benefit h4{font-size:13px;font-weight:600;margin-bottom:3px;}
+.benefit p{font-size:12px;color:var(--text2);line-height:1.6;}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-badge">📋 Case Study · Sanjay Textile</div>
+  <h1>Power Platform Automation</h1>
+  <p>Eliminated manual data entry for stock orders and supplier communications — saving 8+ hours per week using Power Apps + Power Automate + Azure.</p>
+  <div class="tools-row">
+    <span class="tool-badge">Power Apps</span>
+    <span class="tool-badge">Power Automate</span>
+    <span class="tool-badge">SharePoint</span>
+    <span class="tool-badge">Microsoft 365</span>
+    <span class="tool-badge">Azure</span>
+  </div>
+</div>
+
+<div class="kpis">
+  <div class="kpi"><div class="n">60%</div><div class="d">Less manual work</div></div>
+  <div class="kpi"><div class="n">8h/wk</div><div class="d">Time saved</div></div>
+  <div class="kpi"><div class="n">0</div><div class="d">Data entry errors</div></div>
+</div>
+
+<div class="sec">
+  <div class="sec-title">Automation Flow</div>
+  <div class="sec-sub">From order submission to supplier email — fully automated.</div>
+  <div class="flow">
+    <div class="flow-step trigger">
+      <div class="step-icon">📱</div>
+      <div class="step-name">Order Form</div>
+      <div class="step-tool">Power Apps</div>
+    </div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step action">
+      <div class="step-icon">⚡</div>
+      <div class="step-name">Trigger Flow</div>
+      <div class="step-tool">Power Automate</div>
+    </div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step action">
+      <div class="step-icon">📊</div>
+      <div class="step-name">Log to Sheet</div>
+      <div class="step-tool">SharePoint</div>
+    </div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step action">
+      <div class="step-icon">📧</div>
+      <div class="step-name">Email Supplier</div>
+      <div class="step-tool">Outlook</div>
+    </div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step output">
+      <div class="step-icon">✅</div>
+      <div class="step-name">Confirmation</div>
+      <div class="step-tool">Teams Alert</div>
+    </div>
+  </div>
+</div>
+
+<div class="sec" style="padding-top:0;">
+  <div class="sec-title">Live Demo — Order Submission</div>
+  <div class="sec-sub">Simulate the Power Apps form. Watch the automation run step by step.</div>
+  <div class="demo-card">
+    <div class="demo-head">
+      <span>🧵</span> New Stock Order Form
+    </div>
+    <div class="demo-body">
+      <div class="form-row">
+        <div class="field">
+          <label class="lbl">Fabric Type</label>
+          <select id="fabric">
+            <option>Egyptian Cotton</option>
+            <option>Pure Silk</option>
+            <option>Belgian Linen</option>
+            <option>Velvet</option>
+            <option>Denim</option>
+          </select>
+        </div>
+        <div class="field">
+          <label class="lbl">Quantity (metres)</label>
+          <input type="number" id="qty" value="50" min="1">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="field">
+          <label class="lbl">Supplier</label>
+          <select id="supplier">
+            <option>Textile Co. Sydney</option>
+            <option>Global Fabrics AU</option>
+            <option>SilkRoute Imports</option>
+          </select>
+        </div>
+        <div class="field">
+          <label class="lbl">Priority</label>
+          <select id="priority">
+            <option>Standard (5–7 days)</option>
+            <option>Express (2–3 days)</option>
+            <option>Urgent (Next day)</option>
+          </select>
+        </div>
+      </div>
+      <button class="submit-btn" onclick="runFlow()">⚡ Submit & Run Automation</button>
+      <div class="log" id="log" style="display:none;"></div>
+    </div>
+  </div>
+</div>
+
+<div class="sec" style="padding-top:0;">
+  <div class="sec-title">Key Benefits Delivered</div>
+  <div class="sec-sub" style="margin-bottom:14px;"></div>
+  <div class="benefits">
+    <div class="benefit"><div class="b-icon">⏱️</div><h4>Time Savings</h4><p>What took 15 mins of manual entry now runs in under 30 seconds — automatically.</p></div>
+    <div class="benefit"><div class="b-icon">🎯</div><h4>Zero Errors</h4><p>Validated forms and automated logging eliminated human data entry mistakes entirely.</p></div>
+    <div class="benefit"><div class="b-icon">📊</div><h4>Full Visibility</h4><p>Real-time dashboards in Power BI show stock levels and order history at a glance.</p></div>
+    <div class="benefit"><div class="b-icon">📧</div><h4>Auto-Communication</h4><p>Supplier emails are generated and sent automatically with correct order details.</p></div>
+  </div>
+</div>
+
+<script>
+let running = false;
+function sleep(ms){return new Promise(r=>setTimeout(r,ms));}
+
+async function runFlow(){
+  if(running) return;
+  running=true;
+  const fabric=document.getElementById('fabric').value;
+  const qty=document.getElementById('qty').value;
+  const supplier=document.getElementById('supplier').value;
+  const priority=document.getElementById('priority').value;
+  const log=document.getElementById('log');
+  log.style.display='block'; log.innerHTML='';
+
+  const steps=[
+    ['✅','Form validated','<strong>Power Apps</strong> — all fields verified successfully'],
+    ['⚡','Flow triggered','<strong>Power Automate</strong> — new order workflow started'],
+    ['📊','Order logged','<strong>SharePoint</strong> — entry added: '+fabric+', '+qty+'m, '+priority],
+    ['📧','Email drafted','<strong>Outlook</strong> — purchase order sent to '+supplier],
+    ['💬','Teams alert sent','<strong>Microsoft Teams</strong> — #stock-orders channel notified'],
+    ['🔔','Confirmation received','Automation complete — order #'+Math.floor(Math.random()*9000+1000)+' created'],
+  ];
+
+  for(const [icon,title,detail] of steps){
+    await sleep(700);
+    const div=document.createElement('div');
+    div.className='log-item new';
+    div.innerHTML=`<span class="log-icon">${icon}</span><span class="log-text"><strong>${title}</strong> — ${detail}</span>`;
+    log.appendChild(div);
+  }
+  running=false;
+}
+</script>
+</body>
+</html>

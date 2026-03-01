@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Weather Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Inter',-apple-system,sans-serif;background:linear-gradient(135deg,#1a1a2e,#16213e,#0f3460);min-height:100vh;color:#fff;-webkit-font-smoothing:antialiased;padding:20px;display:flex;flex-direction:column;align-items:center;}
+.wrap{width:100%;max-width:680px;}
+/* Search */
+.search-bar{display:flex;gap:8px;margin-bottom:24px;}
+.search-input{flex:1;background:rgba(255,255,255,.12);border:1.5px solid rgba(255,255,255,.15);border-radius:12px;padding:11px 16px;font-size:14px;color:#fff;font-family:inherit;outline:none;backdrop-filter:blur(10px);}
+.search-input::placeholder{color:rgba(255,255,255,.4);}
+.search-input:focus{border-color:rgba(255,255,255,.4);}
+.search-btn{padding:11px 18px;background:rgba(255,255,255,.18);border:none;border-radius:12px;color:#fff;font-size:14px;cursor:pointer;font-family:inherit;font-weight:500;transition:all .2s;backdrop-filter:blur(10px);}
+.search-btn:hover{background:rgba(255,255,255,.28);}
+/* Main card */
+.main-card{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.15);border-radius:24px;padding:28px;backdrop-filter:blur(20px);margin-bottom:14px;}
+.city-row{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:20px;}
+.city-name{font-size:22px;font-weight:700;letter-spacing:-.5px;}
+.city-date{font-size:12px;color:rgba(255,255,255,.6);margin-top:2px;}
+.weather-badge{background:rgba(255,255,255,.15);padding:5px 12px;border-radius:20px;font-size:12px;font-weight:500;}
+.temp-row{display:flex;align-items:center;gap:20px;margin-bottom:24px;}
+.temp-main{font-size:72px;font-weight:300;letter-spacing:-3px;line-height:1;}
+.temp-unit{font-size:28px;font-weight:300;opacity:.6;align-self:flex-start;margin-top:10px;}
+.weather-icon{font-size:64px;}
+.condition{font-size:16px;font-weight:400;color:rgba(255,255,255,.8);margin-bottom:6px;}
+.feels-like{font-size:13px;color:rgba(255,255,255,.55);}
+/* Detail grid */
+.details{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:20px;}
+.detail{background:rgba(255,255,255,.08);border-radius:14px;padding:14px;text-align:center;}
+.detail .d-icon{font-size:20px;margin-bottom:6px;}
+.detail .d-val{font-size:16px;font-weight:700;}
+.detail .d-label{font-size:10px;color:rgba(255,255,255,.5);font-weight:600;text-transform:uppercase;letter-spacing:.05em;margin-top:2px;}
+/* Forecast */
+.forecast{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.15);border-radius:20px;padding:20px;backdrop-filter:blur(20px);margin-bottom:14px;}
+.forecast h3{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:rgba(255,255,255,.5);margin-bottom:14px;}
+.forecast-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;}
+.f-day{background:rgba(255,255,255,.08);border-radius:14px;padding:12px 8px;text-align:center;}
+.f-day .day{font-size:11px;font-weight:600;color:rgba(255,255,255,.6);margin-bottom:6px;}
+.f-day .ficon{font-size:22px;margin-bottom:6px;}
+.f-day .ftemp{font-size:15px;font-weight:700;}
+.f-day .flo{font-size:11px;color:rgba(255,255,255,.45);margin-top:1px;}
+/* Hourly */
+.hourly{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.15);border-radius:20px;padding:20px;backdrop-filter:blur(20px);}
+.hourly h3{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:rgba(255,255,255,.5);margin-bottom:14px;}
+.hourly-row{display:flex;gap:10px;overflow-x:auto;padding-bottom:4px;}
+.h-item{flex-shrink:0;background:rgba(255,255,255,.08);border-radius:12px;padding:10px 12px;text-align:center;min-width:54px;}
+.h-item .h-time{font-size:10px;color:rgba(255,255,255,.5);font-weight:600;margin-bottom:4px;}
+.h-item .h-icon{font-size:18px;margin-bottom:4px;}
+.h-item .h-temp{font-size:13px;font-weight:700;}
+.h-item.now{background:rgba(255,255,255,.22);border:1px solid rgba(255,255,255,.3);}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="search-bar">
+    <input class="search-input" id="city-input" placeholder="Search city..." value="Sydney, AU" onkeydown="if(event.key==='Enter')loadWeather()">
+    <button class="search-btn" onclick="loadWeather()">Search</button>
+  </div>
+
+  <div class="main-card" id="main-card">
+    <div class="city-row">
+      <div>
+        <div class="city-name" id="w-city">Sydney, AU</div>
+        <div class="city-date" id="w-date"></div>
+      </div>
+      <div class="weather-badge" id="w-badge">☀️ Clear</div>
+    </div>
+    <div class="temp-row">
+      <div><span class="temp-main" id="w-temp">24</span><span class="temp-unit">°C</span></div>
+      <div class="weather-icon" id="w-icon">☀️</div>
+    </div>
+    <div class="condition" id="w-condition">Sunny and clear</div>
+    <div class="feels-like" id="w-feels">Feels like 26°C · UV Index 7 (High)</div>
+    <div class="details">
+      <div class="detail"><div class="d-icon">💧</div><div class="d-val" id="w-humid">62%</div><div class="d-label">Humidity</div></div>
+      <div class="detail"><div class="d-icon">💨</div><div class="d-val" id="w-wind">18 km/h</div><div class="d-label">Wind</div></div>
+      <div class="detail"><div class="d-icon">👁️</div><div class="d-val" id="w-vis">10 km</div><div class="d-label">Visibility</div></div>
+      <div class="detail"><div class="d-icon">🌡️</div><div class="d-val" id="w-pressure">1013 hPa</div><div class="d-label">Pressure</div></div>
+    </div>
+  </div>
+
+  <div class="forecast">
+    <h3>5-Day Forecast</h3>
+    <div class="forecast-grid" id="forecast-grid"></div>
+  </div>
+
+  <div class="hourly">
+    <h3>Today's Hourly</h3>
+    <div class="hourly-row" id="hourly-row"></div>
+  </div>
+</div>
+
+<script>
+const CITIES = {
+  'sydney': { city:'Sydney, AU', base:24, icon:'☀️', cond:'Sunny and clear', badge:'☀️ Clear', humid:62, wind:18, vis:10, pressure:1013 },
+  'melbourne': { city:'Melbourne, AU', base:19, icon:'⛅', cond:'Partly cloudy', badge:'⛅ Cloudy', humid:72, wind:22, vis:9, pressure:1008 },
+  'london': { city:'London, UK', base:11, icon:'🌧️', cond:'Light rain showers', badge:'🌧️ Rainy', humid:84, wind:28, vis:5, pressure:1001 },
+  'tokyo': { city:'Tokyo, JP', base:16, icon:'🌤️', cond:'Mostly sunny', badge:'🌤️ Sunny', humid:58, wind:12, vis:10, pressure:1018 },
+  'new york': { city:'New York, US', base:8, icon:'❄️', cond:'Cold and windy', badge:'❄️ Cold', humid:55, wind:35, vis:8, pressure:1005 },
+  'dubai': { city:'Dubai, UAE', base:32, icon:'☀️', cond:'Hot and sunny', badge:'🔥 Hot', humid:40, wind:15, vis:10, pressure:1009 },
+  'paris': { city:'Paris, FR', base:13, icon:'🌦️', cond:'Intermittent rain', badge:'🌦️ Rain', humid:80, wind:20, vis:6, pressure:1003 },
+};
+const DAYS = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+const ICONS = ['☀️','🌤️','⛅','🌧️','⛈️'];
+
+function loadWeather() {
+  const q = document.getElementById('city-input').value.toLowerCase().trim();
+  let data = null;
+  for (const [k,v] of Object.entries(CITIES)) {
+    if (q.includes(k)||k.includes(q)) { data=v; break; }
+  }
+  if (!data) data = { city: document.getElementById('city-input').value, base: Math.round(15+Math.random()*20), icon:'🌤️', cond:'Partly cloudy', badge:'⛅ Partly Cloudy', humid:Math.round(55+Math.random()*30), wind:Math.round(10+Math.random()*25), vis:10, pressure:Math.round(1005+Math.random()*15) };
+
+  const noise = (n) => Math.round(n + (Math.random()-0.5)*4);
+  const now = new Date();
+
+  document.getElementById('w-city').textContent = data.city;
+  document.getElementById('w-date').textContent = now.toLocaleDateString('en-AU', {weekday:'long', day:'numeric', month:'long'});
+  document.getElementById('w-temp').textContent = data.base;
+  document.getElementById('w-icon').textContent = data.icon;
+  document.getElementById('w-condition').textContent = data.cond;
+  document.getElementById('w-feels').textContent = `Feels like ${data.base+2}°C · UV Index ${Math.round(3+Math.random()*7)} (${data.base>25?'High':'Moderate'})`;
+  document.getElementById('w-badge').textContent = data.badge;
+  document.getElementById('w-humid').textContent = data.humid + '%';
+  document.getElementById('w-wind').textContent = data.wind + ' km/h';
+  document.getElementById('w-vis').textContent = data.vis + ' km';
+  document.getElementById('w-pressure').textContent = data.pressure + ' hPa';
+
+  // Forecast
+  const fg = document.getElementById('forecast-grid');
+  fg.innerHTML = '';
+  for (let i=0; i<5; i++) {
+    const d = new Date(now); d.setDate(d.getDate()+i);
+    const hi = noise(data.base); const lo = hi - Math.round(4+Math.random()*6);
+    const icon = ICONS[Math.floor(Math.random()*ICONS.length)];
+    fg.innerHTML += `<div class="f-day"><div class="day">${i===0?'Today':DAYS[d.getDay()]}</div><div class="ficon">${icon}</div><div class="ftemp">${hi}°</div><div class="flo">${lo}°</div></div>`;
+  }
+
+  // Hourly
+  const hr = document.getElementById('hourly-row');
+  hr.innerHTML = '';
+  const curH = now.getHours();
+  for (let i=0; i<12; i++) {
+    const h = (curH+i)%24;
+    const label = i===0?'Now':(h===0?'12am':h<12?`${h}am`:h===12?'12pm':`${h-12}pm`);
+    const t = noise(data.base - Math.abs(h-14)*0.8);
+    const icon = ICONS[Math.floor(Math.random()*2)];
+    hr.innerHTML += `<div class="h-item ${i===0?'now':''}"><div class="h-time">${label}</div><div class="h-icon">${icon}</div><div class="h-temp">${t}°</div></div>`;
+  }
+}
+
+loadWeather();
+</script>
+</body>
+</html>

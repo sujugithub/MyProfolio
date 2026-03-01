@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>File Manager</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Inter',-apple-system,sans-serif;background:#1c1c1e;color:#fff;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:16px;-webkit-font-smoothing:antialiased;}
+.fm{width:100%;max-width:720px;background:#2c2c2e;border-radius:14px;overflow:hidden;box-shadow:0 40px 80px rgba(0,0,0,.6);}
+/* Title bar */
+.titlebar{background:#3a3a3c;padding:12px 16px;display:flex;align-items:center;gap:12px;}
+.dots{display:flex;gap:6px;}
+.dot{width:12px;height:12px;border-radius:50%;cursor:pointer;}
+.dot.r{background:#ff5f57;} .dot.r:hover{background:#ff3b30;}
+.dot.y{background:#febc2e;} .dot.y:hover{background:#ff9f0a;}
+.dot.g{background:#28c840;} .dot.g:hover{background:#34c759;}
+.tb-title{flex:1;text-align:center;font-size:13px;font-weight:500;color:#aeaeb2;}
+.tb-right{width:42px;}
+/* Toolbar */
+.toolbar{background:#2c2c2e;border-bottom:1px solid rgba(255,255,255,.08);padding:10px 16px;display:flex;align-items:center;gap:8px;}
+.nav-btn{width:28px;height:28px;border-radius:6px;background:rgba(255,255,255,.08);border:none;color:#aeaeb2;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;transition:all .15s;}
+.nav-btn:hover{background:rgba(255,255,255,.15);color:#fff;}
+.nav-btn:disabled{opacity:.3;cursor:default;}
+.breadcrumb{flex:1;display:flex;align-items:center;gap:4px;font-size:12px;color:#8e8e93;overflow:hidden;}
+.crumb{color:#aeaeb2;cursor:pointer;white-space:nowrap;}
+.crumb:hover{color:#fff;}
+.crumb.active{color:#fff;font-weight:500;}
+.crumb-sep{color:#48484a;}
+.search{background:rgba(255,255,255,.08);border:none;border-radius:8px;padding:6px 10px;font-size:12px;color:#fff;font-family:inherit;outline:none;width:140px;}
+.search::placeholder{color:#636366;}
+/* Main */
+.main{display:flex;height:340px;}
+.sidebar{width:140px;background:#242426;padding:10px 8px;overflow-y:auto;flex-shrink:0;}
+.sidebar-section{font-size:10px;font-weight:700;color:#636366;text-transform:uppercase;letter-spacing:.06em;padding:6px 8px 4px;}
+.sidebar-item{display:flex;align-items:center;gap:8px;padding:6px 8px;border-radius:7px;cursor:pointer;font-size:12px;color:#aeaeb2;transition:all .15s;}
+.sidebar-item:hover{background:rgba(255,255,255,.07);color:#fff;}
+.sidebar-item.active{background:#0071e3;color:#fff;}
+.sidebar-icon{font-size:14px;flex-shrink:0;}
+.content{flex:1;padding:12px;overflow-y:auto;display:grid;grid-template-columns:repeat(auto-fill,minmax(80px,1fr));gap:4px;align-content:start;}
+.file{display:flex;flex-direction:column;align-items:center;gap:5px;padding:8px 4px;border-radius:8px;cursor:pointer;transition:all .15s;}
+.file:hover{background:rgba(255,255,255,.07);}
+.file.selected{background:#0071e3;}
+.file-icon{font-size:32px;line-height:1;}
+.file-name{font-size:10px;color:#aeaeb2;text-align:center;word-break:break-word;line-height:1.3;}
+.file.selected .file-name{color:#fff;}
+/* Status */
+.statusbar{background:#242426;border-top:1px solid rgba(255,255,255,.08);padding:7px 16px;display:flex;align-items:center;justify-content:space-between;}
+.status-text{font-size:11px;color:#636366;}
+/* Detail pane */
+.detail{width:170px;background:#242426;border-left:1px solid rgba(255,255,255,.08);padding:16px;overflow-y:auto;flex-shrink:0;}
+.detail-icon{font-size:48px;text-align:center;margin-bottom:12px;}
+.detail-name{font-size:13px;font-weight:600;text-align:center;margin-bottom:12px;word-break:break-word;}
+.detail-row{display:flex;justify-content:space-between;font-size:11px;margin-bottom:6px;}
+.detail-key{color:#636366;}
+.detail-val{color:#aeaeb2;text-align:right;}
+.detail-empty{font-size:12px;color:#48484a;text-align:center;padding-top:40px;}
+.view-toggle{display:flex;gap:2px;}
+.vbtn{width:24px;height:24px;border-radius:5px;background:rgba(255,255,255,.08);border:none;color:#aeaeb2;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:11px;}
+.vbtn.active{background:#0071e3;color:#fff;}
+</style>
+</head>
+<body>
+<div class="fm">
+  <div class="titlebar">
+    <div class="dots"><div class="dot r"></div><div class="dot y"></div><div class="dot g"></div></div>
+    <div class="tb-title" id="tb-title">Documents</div>
+    <div class="tb-right"></div>
+  </div>
+  <div class="toolbar">
+    <button class="nav-btn" id="back-btn" onclick="goBack()" disabled>‹</button>
+    <button class="nav-btn" id="fwd-btn" onclick="goFwd()" disabled>›</button>
+    <div class="breadcrumb" id="breadcrumb"></div>
+    <input class="search" placeholder="Search…" oninput="searchFiles(this.value)">
+    <div class="view-toggle">
+      <button class="vbtn active" title="Grid">⊞</button>
+      <button class="vbtn" title="List">☰</button>
+    </div>
+  </div>
+  <div class="main">
+    <div class="sidebar" id="sidebar"></div>
+    <div class="content" id="content"></div>
+    <div class="detail" id="detail"><div class="detail-empty">Select a file to see details</div></div>
+  </div>
+  <div class="statusbar">
+    <span class="status-text" id="status">0 items</span>
+    <span class="status-text" id="storage">256 GB free of 512 GB</span>
+  </div>
+</div>
+
+<script>
+const FS = {
+  'Home': {
+    type:'folder', icon:'🏠', children:{
+      'Documents': { type:'folder', icon:'📁', children:{
+        'Resume.pdf': { type:'file', icon:'📄', size:'248 KB', modified:'Mar 1, 2026' },
+        'Cover Letter.docx': { type:'file', icon:'📝', size:'32 KB', modified:'Feb 28, 2026' },
+        'Portfolio.pdf': { type:'file', icon:'📄', size:'1.2 MB', modified:'Mar 1, 2026' },
+        'University Notes': { type:'folder', icon:'📁', children:{
+          'IT101.pdf': { type:'file', icon:'📄', size:'540 KB', modified:'Feb 12, 2026' },
+          'Networking.pdf': { type:'file', icon:'📄', size:'820 KB', modified:'Jan 30, 2026' },
+          'Cloud Computing.pdf': { type:'file', icon:'📄', size:'1.1 MB', modified:'Feb 20, 2026' },
+        }}
+      }},
+      'Projects': { type:'folder', icon:'💻', children:{
+        'digit-ai-pro': { type:'folder', icon:'📁', children:{
+          'index.html': { type:'file', icon:'🌐', size:'18 KB', modified:'Mar 1, 2026' },
+          'model.json': { type:'file', icon:'📊', size:'2.4 MB', modified:'Feb 28, 2026' },
+        }},
+        'calculator': { type:'folder', icon:'📁', children:{
+          'index.html': { type:'file', icon:'🌐', size:'8 KB', modified:'Feb 24, 2026' },
+          'style.css': { type:'file', icon:'🎨', size:'4 KB', modified:'Feb 24, 2026' },
+        }},
+        'portfolio': { type:'folder', icon:'📁', children:{
+          'index.html': { type:'file', icon:'🌐', size:'48 KB', modified:'Mar 1, 2026' },
+          'styles.css': { type:'file', icon:'🎨', size:'18 KB', modified:'Mar 1, 2026' },
+          'script.js': { type:'file', icon:'⚡', size:'9 KB', modified:'Mar 1, 2026' },
+        }},
+      }},
+      'Downloads': { type:'folder', icon:'📥', children:{
+        'AZ-900 Certificate.pdf': { type:'file', icon:'🏆', size:'512 KB', modified:'Dec 2024' },
+        'VS Code.dmg': { type:'file', icon:'💿', size:'94 MB', modified:'Jan 2026' },
+        'node-v20.dmg': { type:'file', icon:'💿', size:'62 MB', modified:'Feb 2026' },
+      }},
+      'Pictures': { type:'folder', icon:'🖼️', children:{
+        'Profile.jpg': { type:'file', icon:'🖼️', size:'2.1 MB', modified:'Mar 1, 2026' },
+        'Screenshot.png': { type:'file', icon:'🖼️', size:'1.4 MB', modified:'Mar 1, 2026' },
+      }},
+      'Desktop': { type:'folder', icon:'🖥️', children:{
+        'todo.txt': { type:'file', icon:'📝', size:'1 KB', modified:'Mar 1, 2026' },
+      }},
+    }
+  }
+};
+
+const shortcuts = [
+  {label:'Recents',icon:'🕐',path:['Home']},
+  {label:'Home',icon:'🏠',path:['Home']},
+  {label:'Documents',icon:'📁',path:['Home','Documents']},
+  {label:'Downloads',icon:'📥',path:['Home','Downloads']},
+  {label:'Projects',icon:'💻',path:['Home','Projects']},
+  {label:'Desktop',icon:'🖥️',path:['Home','Desktop']},
+];
+
+let path = ['Home'];
+let selected = null;
+let history = [['Home']];
+let histIdx = 0;
+
+function getNode(p) {
+  let node = FS;
+  for (const k of p) node = (node[k]?.children ?? node[k]);
+  return node;
+}
+
+function navigate(newPath, pushHistory=true) {
+  path = newPath;
+  selected = null;
+  if (pushHistory) { history = history.slice(0, histIdx+1); history.push([...path]); histIdx = history.length-1; }
+  document.getElementById('back-btn').disabled = histIdx <= 0;
+  document.getElementById('fwd-btn').disabled = histIdx >= history.length-1;
+  render();
+}
+
+function goBack() { if(histIdx>0){histIdx--;navigate([...history[histIdx]],false);} }
+function goFwd() { if(histIdx<history.length-1){histIdx++;navigate([...history[histIdx]],false);} }
+
+function render() {
+  // Sidebar
+  const sb = document.getElementById('sidebar');
+  sb.innerHTML = '<div class="sidebar-section">Favourites</div>';
+  shortcuts.forEach(s => {
+    const div = document.createElement('div');
+    div.className = 'sidebar-item' + (JSON.stringify(s.path)===JSON.stringify(path)?' active':'');
+    div.innerHTML = `<span class="sidebar-icon">${s.icon}</span>${s.label}`;
+    div.onclick = () => navigate([...s.path]);
+    sb.appendChild(div);
+  });
+
+  // Breadcrumb
+  const bc = document.getElementById('breadcrumb');
+  bc.innerHTML = path.map((p,i) => {
+    const active = i === path.length-1;
+    return (i>0?'<span class="crumb-sep">›</span>':'') +
+      `<span class="crumb${active?' active':''}" data-idx="${i}">${p}</span>`;
+  }).join('');
+  bc.querySelectorAll('.crumb').forEach(c => {
+    c.onclick = () => navigate(path.slice(0, parseInt(c.dataset.idx)+1));
+  });
+  document.getElementById('tb-title').textContent = path[path.length-1];
+
+  // Content
+  const node = getNode(path);
+  renderContent(node);
+}
+
+function renderContent(node) {
+  const ct = document.getElementById('content');
+  ct.innerHTML = '';
+  if (!node) return;
+  const items = Object.entries(node);
+  document.getElementById('status').textContent = `${items.length} item${items.length!==1?'s':''}`;
+  items.forEach(([name, meta]) => {
+    const div = document.createElement('div');
+    div.className = 'file' + (selected===name?' selected':'');
+    div.innerHTML = `<div class="file-icon">${meta.icon}</div><div class="file-name">${name}</div>`;
+    div.ondblclick = () => { if(meta.type==='folder') navigate([...path, name]); };
+    div.onclick = () => { selected = name; renderContent(node); showDetail(name, meta); };
+    ct.appendChild(div);
+  });
+}
+
+function showDetail(name, meta) {
+  const det = document.getElementById('detail');
+  if (meta.type === 'folder') {
+    const count = Object.keys(meta.children||{}).length;
+    det.innerHTML = `<div class="detail-icon">${meta.icon}</div><div class="detail-name">${name}</div>
+      <div class="detail-row"><span class="detail-key">Kind</span><span class="detail-val">Folder</span></div>
+      <div class="detail-row"><span class="detail-key">Items</span><span class="detail-val">${count}</span></div>
+      <div class="detail-row"><span class="detail-key">Modified</span><span class="detail-val">Today</span></div>`;
+  } else {
+    det.innerHTML = `<div class="detail-icon">${meta.icon}</div><div class="detail-name">${name}</div>
+      <div class="detail-row"><span class="detail-key">Size</span><span class="detail-val">${meta.size||'—'}</span></div>
+      <div class="detail-row"><span class="detail-key">Modified</span><span class="detail-val">${meta.modified||'—'}</span></div>
+      <div class="detail-row"><span class="detail-key">Kind</span><span class="detail-val">${name.split('.').pop().toUpperCase()||'File'}</span></div>`;
+  }
+}
+
+function searchFiles(q) {
+  if (!q) { render(); return; }
+  const node = getNode(path);
+  const filtered = Object.fromEntries(Object.entries(node).filter(([k]) => k.toLowerCase().includes(q.toLowerCase())));
+  renderContent(filtered);
+}
+
+navigate(['Home'], false);
+</script>
+</body>
+</html>

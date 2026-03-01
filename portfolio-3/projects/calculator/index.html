@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Scientific Calculator</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Inter',-apple-system,sans-serif;background:#1d1d1f;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;-webkit-font-smoothing:antialiased;}
+.calc{width:100%;max-width:340px;background:#2c2c2e;border-radius:24px;overflow:hidden;box-shadow:0 40px 80px rgba(0,0,0,.6);}
+.display{padding:20px 22px 14px;min-height:100px;display:flex;flex-direction:column;justify-content:flex-end;align-items:flex-end;}
+.expr{font-size:15px;color:#8e8e93;min-height:20px;word-break:break-all;text-align:right;}
+.main-display{font-size:52px;font-weight:300;color:#fff;letter-spacing:-2px;line-height:1.1;word-break:break-all;text-align:right;transition:font-size .1s;}
+.main-display.small{font-size:32px;}
+.main-display.xsmall{font-size:22px;}
+.mode-row{display:flex;gap:6px;padding:0 14px 10px;}
+.mode-btn{flex:1;padding:6px;border-radius:8px;border:none;font-size:11px;font-weight:600;font-family:inherit;cursor:pointer;background:#3a3a3c;color:#8e8e93;transition:all .15s;}
+.mode-btn.active{background:#0071e3;color:#fff;}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:#1d1d1f;}
+.btn{padding:0;height:70px;border:none;font-size:17px;font-weight:500;font-family:inherit;cursor:pointer;transition:all .1s;display:flex;align-items:center;justify-content:center;}
+.btn:active{opacity:.7;transform:scale(.96);}
+.btn.fn{background:#3a3a3c;color:#fff;font-size:14px;font-weight:400;}
+.btn.fn:hover{background:#48484a;}
+.btn.op{background:#ff9f0a;color:#fff;}
+.btn.op:hover{background:#ffb340;}
+.btn.op.active-op{background:#fff;color:#ff9f0a;}
+.btn.num{background:#1c1c1e;color:#fff;}
+.btn.num:hover{background:#2c2c2e;}
+.btn.zero{grid-column:span 2;justify-content:flex-start;padding-left:28px;}
+.btn.gray{background:#636366;color:#fff;}
+.btn.gray:hover{background:#8e8e93;}
+.sci-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:1px;background:#1d1d1f;}
+.sci-grid .btn{height:50px;font-size:13px;background:#1c1c1e;color:#0071e3;font-weight:500;}
+.sci-grid .btn:hover{background:#2c2c2e;}
+.sci-hidden{display:none;}
+</style>
+</head>
+<body>
+<div class="calc">
+  <div class="display">
+    <div class="expr" id="expr"></div>
+    <div class="main-display" id="display">0</div>
+  </div>
+  <div class="mode-row">
+    <button class="mode-btn active" onclick="setMode('basic')">Basic</button>
+    <button class="mode-btn" onclick="setMode('sci')">Scientific</button>
+  </div>
+  <div class="sci-grid sci-hidden" id="sci-grid">
+    <button class="btn" onclick="sciOp('sin')">sin</button>
+    <button class="btn" onclick="sciOp('cos')">cos</button>
+    <button class="btn" onclick="sciOp('tan')">tan</button>
+    <button class="btn" onclick="sciOp('log')">log</button>
+    <button class="btn" onclick="sciOp('ln')">ln</button>
+    <button class="btn" onclick="sciOp('sqrt')">√</button>
+    <button class="btn" onclick="sciOp('sq')">x²</button>
+    <button class="btn" onclick="sciOp('cube')">x³</button>
+    <button class="btn" onclick="sciOp('inv')">1/x</button>
+    <button class="btn" onclick="sciOp('pi')">π</button>
+  </div>
+  <div class="grid">
+    <button class="btn gray" onclick="ac()">AC</button>
+    <button class="btn gray" onclick="toggleSign()">+/-</button>
+    <button class="btn gray" onclick="percent()">%</button>
+    <button class="btn op" id="op-div" onclick="setOp('/')">÷</button>
+    <button class="btn num" onclick="num('7')">7</button>
+    <button class="btn num" onclick="num('8')">8</button>
+    <button class="btn num" onclick="num('9')">9</button>
+    <button class="btn op" id="op-mul" onclick="setOp('*')">×</button>
+    <button class="btn num" onclick="num('4')">4</button>
+    <button class="btn num" onclick="num('5')">5</button>
+    <button class="btn num" onclick="num('6')">6</button>
+    <button class="btn op" id="op-sub" onclick="setOp('-')">−</button>
+    <button class="btn num" onclick="num('1')">1</button>
+    <button class="btn num" onclick="num('2')">2</button>
+    <button class="btn num" onclick="num('3')">3</button>
+    <button class="btn op" id="op-add" onclick="setOp('+')">+</button>
+    <button class="btn num zero" onclick="num('0')">0</button>
+    <button class="btn num" onclick="dot()">.</button>
+    <button class="btn op" onclick="equals()">=</button>
+  </div>
+</div>
+<script>
+let current = '0', prev = '', op = null, justCalc = false, waitNext = false;
+
+const disp = document.getElementById('display');
+const expr = document.getElementById('expr');
+
+function updateDisplay(val) {
+  const s = String(val);
+  disp.textContent = s;
+  disp.className = 'main-display' + (s.length > 12 ? ' xsmall' : s.length > 9 ? ' small' : '');
+}
+
+function clearOps() {
+  ['add','sub','mul','div'].forEach(o => document.getElementById('op-'+o)?.classList.remove('active-op'));
+}
+
+function num(n) {
+  if (waitNext) { current = n; waitNext = false; }
+  else if (current === '0' && n !== '.') current = n;
+  else if (current.length < 12) current += n;
+  updateDisplay(current);
+}
+
+function dot() {
+  if (waitNext) { current = '0.'; waitNext = false; }
+  else if (!current.includes('.')) current += '.';
+  updateDisplay(current);
+}
+
+function ac() {
+  current = '0'; prev = ''; op = null; justCalc = false; waitNext = false;
+  expr.textContent = ''; clearOps(); updateDisplay('0');
+}
+
+function toggleSign() { current = String(-parseFloat(current) || 0); updateDisplay(current); }
+function percent() { current = String(parseFloat(current) / 100); updateDisplay(current); }
+
+function setOp(o) {
+  if (op && !waitNext) { equals(true); }
+  prev = current; op = o; waitNext = true;
+  clearOps();
+  const ids = {'+':'add','-':'sub','*':'mul','/':'div'};
+  document.getElementById('op-'+ids[o])?.classList.add('active-op');
+  const syms = {'+':'+','-':'−','*':'×','/':'÷'};
+  expr.textContent = `${prev} ${syms[o]}`;
+}
+
+function equals(silent) {
+  if (!op || !prev) return;
+  const a = parseFloat(prev), b = parseFloat(current);
+  let res;
+  if (op==='+') res=a+b; else if(op==='-') res=a-b;
+  else if(op==='*') res=a*b; else if(op=='/') res=b===0?'Error':a/b;
+  if (!silent) expr.textContent = `${prev} ${({'+':'+','-':'−','*':'×','/':'÷'})[op]} ${current} =`;
+  current = String(parseFloat(res?.toFixed(10)) ?? res);
+  clearOps(); op = null; prev = ''; waitNext = true;
+  updateDisplay(current);
+}
+
+function sciOp(fn) {
+  const v = parseFloat(current);
+  let res;
+  if(fn==='sin') res=Math.sin(v*Math.PI/180);
+  else if(fn==='cos') res=Math.cos(v*Math.PI/180);
+  else if(fn==='tan') res=Math.tan(v*Math.PI/180);
+  else if(fn==='log') res=Math.log10(v);
+  else if(fn==='ln') res=Math.log(v);
+  else if(fn==='sqrt') res=Math.sqrt(v);
+  else if(fn==='sq') res=v*v;
+  else if(fn==='cube') res=v*v*v;
+  else if(fn==='inv') res=1/v;
+  else if(fn==='pi') { current='3.14159265'; updateDisplay(current); return; }
+  expr.textContent = `${fn}(${v}) =`;
+  current = String(parseFloat(res.toFixed(10)));
+  waitNext = true; updateDisplay(current);
+}
+
+function setMode(m) {
+  document.querySelectorAll('.mode-btn').forEach((b,i)=>b.classList.toggle('active',i===(m==='sci'?1:0)));
+  document.getElementById('sci-grid').classList.toggle('sci-hidden', m!=='sci');
+}
+
+document.addEventListener('keydown', e => {
+  if(e.key>='0'&&e.key<='9') num(e.key);
+  else if(e.key==='.') dot();
+  else if(e.key==='+') setOp('+');
+  else if(e.key==='-') setOp('-');
+  else if(e.key==='*') setOp('*');
+  else if(e.key==='/') {e.preventDefault();setOp('/');}
+  else if(e.key==='Enter'||e.key==='=') equals();
+  else if(e.key==='Backspace') { current=current.length>1?current.slice(0,-1):'0'; updateDisplay(current); }
+  else if(e.key==='Escape') ac();
+});
+</script>
+</body>
+</html>

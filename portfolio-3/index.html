@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sujay Shrestha — IT Student & Developer</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
+
+  <!-- Styles — edit assets/css/style.css to change appearance -->
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+<!-- ============================================================
+     NAV
+     To edit: change logo name, add/remove links
+     ============================================================ -->
+<nav>
+  <a class="nav-logo" href="#home">Sujay Shrestha</a>
+  <ul class="nav-links">
+    <li><a href="#demo">ML Demo</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <button class="nav-game" onclick="openGame()">
+    <span class="icon">sports_esports</span> Game
+  </button>
+</nav>
+
+
+<!-- ============================================================
+     HERO
+     To edit: change tagline, subtitle, button text
+     ============================================================ -->
+<section class="hero" id="home">
+  <div class="hero-chip">
+    <span class="icon icon-fill">location_on</span>
+    Sydney, AU · ACU · IT Student
+  </div>
+  <h1>Sujay<br><span class="blue">Shrestha</span></h1>
+  <p class="hero-sub">
+    Developer, problem-solver, and cloud enthusiast. I build things that actually work —
+    from ML models to business tools to full websites.
+  </p>
+  <div class="hero-btns">
+    <a href="#demo" class="btn-p"><span class="icon icon-fill">smart_toy</span> Try my ML Demo</a>
+    <a href="#contact" class="btn-s"><span class="icon">mail</span> Get in touch</a>
+  </div>
+  <div class="scroll-hint">
+    <span class="scroll-hint-label">Scroll</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+
+<!-- ============================================================
+     ML DEMO
+     The iframe loads projects/digit-ai-pro/index.html
+     ============================================================ -->
+<section class="sec sec-bg" id="demo">
+  <div class="sec-inner">
+    <div class="sec-label sa"><span class="icon icon-fill">psychology</span> Featured Project</div>
+    <h2 class="sa d1">Digit Recognition <span style="color:var(--accent)">AI</span></h2>
+    <p class="sec-sub sa d2">
+      Draw any digit 0–9. A neural network I built recognises it in real time —
+      entirely in the browser, zero server needed.
+    </p>
+    <div class="demo-card sa d3">
+      <div class="demo-card-top">
+        <div class="demo-card-name">
+          <span class="icon icon-fill">draw</span>
+          Interactive Demo · digit-ai-pro
+        </div>
+        <div class="demo-live">Live</div>
+      </div>
+      <div class="demo-frame-wrap" id="hero-demo-wrap">
+        <iframe
+          id="hero-demo-frame"
+          src="projects/digit-ai-pro/index.html"
+          title="Digit AI Demo"
+          onload="demoLoaded('hero-demo-frame','hero-demo-ph')"
+          onerror="demoFailed('hero-demo-frame','hero-demo-ph')">
+        </iframe>
+        <div class="demo-placeholder" id="hero-demo-ph">
+          <span class="icon">folder_open</span>
+          <h3>Demo ready to load</h3>
+          <p>Place your <strong>digit-ai-pro</strong> folder inside the <strong>projects/</strong> folder.</p>
+          <code>projects/digit-ai-pro/index.html</code>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ============================================================
+     ABOUT
+     To edit: change bio text, stat numbers, stat labels
+     ============================================================ -->
+<section class="sec" id="about">
+  <div class="sec-inner">
+    <div class="sec-label sa"><span class="icon">person</span> About</div>
+    <h2 class="sa d1">Building things<br>that matter.</h2>
+    <div class="about-grid">
+
+      <!-- Bio text — edit this paragraph -->
+      <div class="about-text sa-l">
+        <p>
+          IT student focused on <strong>cloud, software, and real-world solutions</strong>.
+          I don't just study tech — I apply it. From automation tools that save hours of work,
+          to websites that serve real customers, I bring a practical edge most students don't have.
+        </p>
+        <p>
+          I enjoy building tools that make work easier, systems smarter, and experiences cleaner.
+          Graduating from ACU in November 2026 with a Bachelor of Information Technology.
+        </p>
+      </div>
+
+      <!-- Stats — edit numbers and labels here -->
+      <div class="stats sa-r">
+        <div class="stat d1">
+          <span class="icon icon-fill">work</span>
+          <div class="stat-n">2+</div>
+          <div class="stat-d">Years real-world experience</div>
+        </div>
+        <div class="stat d2">
+          <span class="icon icon-fill">verified</span>
+          <div class="stat-n">2</div>
+          <div class="stat-d">Microsoft certifications</div>
+        </div>
+        <div class="stat d3">
+          <span class="icon icon-fill">code</span>
+          <div class="stat-n">7+</div>
+          <div class="stat-d">Projects completed</div>
+        </div>
+        <div class="stat d4">
+          <span class="icon icon-fill">school</span>
+          <div class="stat-n" style="font-size:20px;letter-spacing:-.3px;">Nov 2026</div>
+          <div class="stat-d">Graduation · ACU Sydney</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ============================================================
+     PROJECTS
+     To add a project: copy any proj-card block and update:
+       - onclick="openProject('your-folder-name')"
+       - icon name
+       - title, description, tags
+     Put your project files in: projects/your-folder-name/index.html
+     ============================================================ -->
+<section class="sec sec-bg" id="projects">
+  <div class="sec-inner">
+    <div class="sec-label sa"><span class="icon">folder_open</span> Projects</div>
+    <h2 class="sa d1">Selected work.</h2>
+
+    <div class="proj-grid">
+
+      <!-- FEATURED PROJECT (spans 2 columns) -->
+      <div class="proj-card featured sa d1" onclick="openProject('digit-ai-pro')">
+        <div class="proj-icon">
+          <span class="icon icon-fill" style="font-size:28px;color:#fff;">psychology</span>
+        </div>
+        <div class="proj-body">
+          <div class="proj-demo-badge">Live Demo</div>
+          <h3>Digit Recognition AI</h3>
+          <p>Draw a digit 0–9 and a neural network I built from scratch recognises it in real time. Entirely in the browser — no server, no external ML libraries.</p>
+          <div class="proj-tags">
+            <span class="proj-tag" style="background:rgba(255,255,255,.1);color:rgba(255,255,255,.8);">Machine Learning</span>
+            <span class="proj-tag" style="background:rgba(255,255,255,.1);color:rgba(255,255,255,.8);">JavaScript</span>
+            <span class="proj-tag" style="background:rgba(255,255,255,.1);color:rgba(255,255,255,.8);">Canvas API</span>
+            <span class="proj-tag" style="background:rgba(255,255,255,.1);color:rgba(255,255,255,.8);">Neural Network</span>
+          </div>
+          <span class="proj-link"><span class="icon">play_arrow</span> Open live demo</span>
+        </div>
+      </div>
+
+      <!-- Store Busy Predictor -->
+      <div class="proj-card sa d2" onclick="openProject('store-busy-predictor')">
+        <div class="proj-icon"><span class="icon icon-fill">trending_up</span></div>
+        <div class="proj-body">
+          <h3>Store Busy Predictor</h3>
+          <p>Predicts customer traffic using historical data trends. Helps managers optimise staffing before peak periods hit.</p>
+          <div class="proj-tags">
+            <span class="proj-tag">Python</span>
+            <span class="proj-tag">Machine Learning</span>
+            <span class="proj-tag">Pandas</span>
+          </div>
+          <span class="proj-link"><span class="icon">open_in_new</span> Open demo</span>
+        </div>
+      </div>
+
+      <!-- Calculator -->
+      <div class="proj-card sa d3" onclick="openProject('calculator')">
+        <div class="proj-icon"><span class="icon icon-fill">calculate</span></div>
+        <div class="proj-body">
+          <div class="proj-demo-badge" style="background:#dafbe1;color:#1a7f37;">Working</div>
+          <h3>Scientific Calculator</h3>
+          <p>Fully functional calculator with keyboard support. Built from scratch with clean Apple-inspired UI and real-time expression display.</p>
+          <div class="proj-tags">
+            <span class="proj-tag">JavaScript</span>
+            <span class="proj-tag">HTML</span>
+            <span class="proj-tag">CSS</span>
+          </div>
+          <span class="proj-link"><span class="icon">play_arrow</span> Try it now</span>
+        </div>
+      </div>
+
+      <!-- Password Generator -->
+      <div class="proj-card sa d4" onclick="openProject('password-generator')">
+        <div class="proj-icon"><span class="icon icon-fill">key</span></div>
+        <div class="proj-body">
+          <div class="proj-demo-badge" style="background:#dafbe1;color:#1a7f37;">Working</div>
+          <h3>Password Generator</h3>
+          <p>Secure password generator using the Web Crypto API. Adjustable length, character sets, and one-click copy with strength indicator.</p>
+          <div class="proj-tags">
+            <span class="proj-tag">JavaScript</span>
+            <span class="proj-tag">Web Crypto API</span>
+            <span class="proj-tag">HTML</span>
+          </div>
+          <span class="proj-link"><span class="icon">play_arrow</span> Try it now</span>
+        </div>
+      </div>
+
+      <!-- File Manager -->
+      <div class="proj-card sa d5" onclick="openProject('file-manager')">
+        <div class="proj-icon"><span class="icon icon-fill">folder</span></div>
+        <div class="proj-body">
+          <h3>Apple-Style File Manager</h3>
+          <p>Clean desktop file manager built with JavaFX. Smooth transitions, minimal interface, Apple-inspired design language throughout.</p>
+          <div class="proj-tags">
+            <span class="proj-tag">Java</span>
+            <span class="proj-tag">JavaFX</span>
+            <span class="proj-tag">OOP</span>
+          </div>
+          <span class="proj-link"><span class="icon">open_in_new</span> Open demo</span>
+        </div>
+      </div>
+
+      <!-- Sanjay Textile -->
+      <div class="proj-card sa d6" onclick="openProject('sanjay-textile-website')">
+        <div class="proj-icon"><span class="icon icon-fill">language</span></div>
+        <div class="proj-body">
+          <h3>Sanjay Textile Website</h3>
+          <p>Full business website built from scratch — product showcase, contact system, fully mobile-responsive and deployed live.</p>
+          <div class="proj-tags">
+            <span class="proj-tag">HTML</span>
+            <span class="proj-tag">CSS</span>
+            <span class="proj-tag">JavaScript</span>
+          </div>
+          <span class="proj-link"><span class="icon">open_in_new</span> Open demo</span>
+        </div>
+      </div>
+
+      <!-- Power Platform -->
+      <div class="proj-card sa d1" onclick="openProject('power-platform-automation')">
+        <div class="proj-icon"><span class="icon icon-fill">bolt</span></div>
+        <div class="proj-body">
+          <h3>Power Platform Automation</h3>
+          <p>Business process automation with Power Apps + Power Automate. Reduced manual data entry by 60% for a real business workflow.</p>
+          <div class="proj-tags">
+            <span class="proj-tag">Power Apps</span>
+            <span class="proj-tag">Power Automate</span>
+            <span class="proj-tag">Azure</span>
+          </div>
+          <span class="proj-link"><span class="icon">open_in_new</span> Open case study</span>
+        </div>
+      </div>
+
+      <!-- Mini Games -->
+      <div class="proj-card sa d2" onclick="openProject('mini-games-suite')">
+        <div class="proj-icon"><span class="icon icon-fill">gamepad</span></div>
+        <div class="proj-body">
+          <h3>Mini Games Suite</h3>
+          <p>Collection of browser-based games built in vanilla JavaScript — memory match, puzzle, and more. No frameworks, no dependencies.</p>
+          <div class="proj-tags">
+            <span class="proj-tag">JavaScript</span>
+            <span class="proj-tag">HTML5</span>
+            <span class="proj-tag">Canvas</span>
+          </div>
+          <span class="proj-link"><span class="icon">play_arrow</span> Play now</span>
+        </div>
+      </div>
+
+      <!-- Budget Tracker -->
+      <div class="proj-card sa d3" onclick="openProject('budget-tracker')">
+        <div class="proj-icon"><span class="icon icon-fill">account_balance_wallet</span></div>
+        <div class="proj-body">
+          <h3>Budget Tracker</h3>
+          <p>Smart budget tool that visualises spending patterns and flags overspending. Built with Excel + Power Platform integration.</p>
+          <div class="proj-tags">
+            <span class="proj-tag">Excel</span>
+            <span class="proj-tag">Power Platform</span>
+            <span class="proj-tag">Data Analysis</span>
+          </div>
+          <span class="proj-link"><span class="icon">open_in_new</span> Open demo</span>
+        </div>
+      </div>
+
+      <!-- Quiz App -->
+      <div class="proj-card sa d4" onclick="openProject('quiz-app')">
+        <div class="proj-icon"><span class="icon icon-fill">quiz</span></div>
+        <div class="proj-body">
+          <h3>Quiz App</h3>
+          <p>Interactive quiz application with score tracking, timed questions, and multiple categories. Built with vanilla JavaScript.</p>
+          <div class="proj-tags">
+            <span class="proj-tag">JavaScript</span>
+            <span class="proj-tag">HTML</span>
+            <span class="proj-tag">CSS</span>
+          </div>
+          <span class="proj-link"><span class="icon">play_arrow</span> Play now</span>
+        </div>
+      </div>
+
+      <!-- Weather Dashboard -->
+      <div class="proj-card sa d5" onclick="openProject('weather-dashboard')">
+        <div class="proj-icon"><span class="icon icon-fill">cloud</span></div>
+        <div class="proj-body">
+          <h3>Weather Dashboard</h3>
+          <p>Clean weather dashboard pulling live data from a public API. Shows temperature, humidity, wind, and a 5-day forecast.</p>
+          <div class="proj-tags">
+            <span class="proj-tag">JavaScript</span>
+            <span class="proj-tag">REST API</span>
+            <span class="proj-tag">HTML</span>
+          </div>
+          <span class="proj-link"><span class="icon">open_in_new</span> Open demo</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ============================================================
+     SKILLS
+     To edit: add/remove skill rows, change dots (green = certified)
+     ============================================================ -->
+<section class="sec" id="skills">
+  <div class="sec-inner">
+    <div class="sec-label sa"><span class="icon">terminal</span> Skills</div>
+    <h2 class="sa d1">What I work with.</h2>
+    <div class="skills-grid">
+
+      <div class="skill-group sa d1">
+        <div class="skill-group-lbl"><span class="icon">code</span> Languages</div>
+        <div class="skill-list">
+          <div class="skill-row">Python <div class="skill-dot"></div></div>
+          <div class="skill-row">Java <div class="skill-dot"></div></div>
+          <div class="skill-row">JavaScript <div class="skill-dot"></div></div>
+          <div class="skill-row">HTML & CSS <div class="skill-dot"></div></div>
+          <div class="skill-row">JavaFX <div class="skill-dot"></div></div>
+        </div>
+      </div>
+
+      <div class="skill-group sa d2">
+        <div class="skill-group-lbl"><span class="icon">cloud</span> Cloud & Platforms</div>
+        <div class="skill-list">
+          <div class="skill-row">Microsoft Azure <div class="skill-dot"></div></div>
+          <div class="skill-row">Power Platform <div class="skill-dot"></div></div>
+          <div class="skill-row">Power Apps <div class="skill-dot"></div></div>
+          <div class="skill-row">Power Automate <div class="skill-dot"></div></div>
+        </div>
+      </div>
+
+      <div class="skill-group sa d3">
+        <div class="skill-group-lbl"><span class="icon">build</span> Tools & Certifications</div>
+        <div class="skill-list">
+          <div class="skill-row">Excel / Google Sheets <div class="skill-dot"></div></div>
+          <div class="skill-row">Git <div class="skill-dot"></div></div>
+          <div class="skill-row">AZ-900 Azure <div class="skill-dot green"></div></div>
+          <div class="skill-row">PL-900 Power Platform <div class="skill-dot green"></div></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ============================================================
+     EXPERIENCE
+     To edit: add/remove exp-item blocks, change dates/roles/descriptions
+     ============================================================ -->
+<section class="sec sec-bg" id="experience">
+  <div class="sec-inner">
+    <div class="sec-label sa"><span class="icon">work_history</span> Experience</div>
+    <h2 class="sa d1">Where I've worked.</h2>
+    <div class="exp-list">
+
+      <div class="exp-item sa">
+        <div class="exp-period">2024 — Present</div>
+        <div>
+          <div class="exp-role">Team Member</div>
+          <div class="exp-co"><span class="icon">location_on</span> Sanjay Textile · Sydney</div>
+          <p class="exp-desc">Part of the core team driving day-to-day operations. Built and maintain the company website, handle tech initiatives, and contribute across departments — from stock coordination to customer experience.</p>
+        </div>
+      </div>
+
+      <div class="exp-item sa d1">
+        <div class="exp-period">2022 — Ongoing</div>
+        <div>
+          <div class="exp-role">Freelance Web Designer & Developer</div>
+          <div class="exp-co"><span class="icon">public</span> Self-employed · Sydney</div>
+          <p class="exp-desc">Designed and built websites and digital assets for small businesses across Sydney. Handling everything from visual design to deployment — combining design sensibility with technical execution.</p>
+        </div>
+      </div>
+
+      <div class="exp-item sa d2">
+        <div class="exp-period">2023 — 2026</div>
+        <div>
+          <div class="exp-role">Bachelor of Information Technology</div>
+          <div class="exp-co"><span class="icon">school</span> Australian Catholic University · Graduating Nov 2026</div>
+          <p class="exp-desc">Studying software development, cloud computing, systems analysis, and IT project management. Actively applying coursework to real-world clients and projects.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ============================================================
+     CONTACT
+     To edit: update email href, LinkedIn URL, GitHub URL
+     ============================================================ -->
+<section class="sec" id="contact">
+  <div class="contact-inner">
+    <div class="sec-label sa" style="justify-content:center;"><span class="icon">mail</span> Contact</div>
+    <h2 class="sa d1">Let's connect.</h2>
+    <p class="contact-sub sa d2">
+      Open to internships, part-time roles, and interesting collaborations.
+      Based in Sydney. I reply fast.
+    </p>
+    <div class="contact-links sa d3">
+      <!-- Update mailto: with your actual email -->
+      <a href="mailto:sujay@example.com" class="clink"><span class="icon">mail</span> Email</a>
+      <a href="https://www.linkedin.com/in/sujay-shrestha-8347872b6" target="_blank" class="clink"><span class="icon">work</span> LinkedIn</a>
+      <a href="https://github.com/sujugithub" target="_blank" class="clink"><span class="icon">code</span> GitHub</a>
+    </div>
+  </div>
+</section>
+
+
+<!-- ============================================================
+     FOOTER
+     ============================================================ -->
+<footer>
+  <span class="f-name">Sujay Shrestha</span>
+  <span class="f-copy">© 2025 · Sydney, AU</span>
+  <button class="f-game" onclick="openGame()">
+    <span class="icon">sports_esports</span> Hidden game
+  </button>
+</footer>
+
+
+<!-- ============================================================
+     GAME OVERLAY (Flappy Resume)
+     ============================================================ -->
+<div id="game-ov">
+  <button class="g-close" onclick="closeGame()"><span class="icon">close</span></button>
+  <div class="g-title">Flappy Resume</div>
+  <p class="g-sub">Dodge the obstacles of developer life — Space or tap to flap</p>
+  <canvas id="gc" width="400" height="480"></canvas>
+  <div class="g-ui">
+    <button class="g-btn pri" onclick="startGame()"><span class="icon">play_arrow</span> Start</button>
+    <label class="g-btn" for="pup"><span class="icon">photo_camera</span> Use my photo</label>
+    <input type="file" id="pup" accept="image/*" onchange="loadPhoto(event)">
+  </div>
+  <div class="g-scores">
+    <div class="g-score">Score <span id="gscore">0</span></div>
+    <div class="g-score">Best <span id="gbest">0</span></div>
+  </div>
+</div>
+
+<!-- JavaScript — edit assets/js/main.js for all functionality -->
+<script src="assets/js/main.js"></script>
+
+</body>
+</html>

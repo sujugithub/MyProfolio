@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sujay Shrestha — IT Student & Developer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #f5f4f0;
+    --ink: #0e0e0e;
+    --ink2: #4a4a4a;
+    --ink3: #9a9a9a;
+    --accent: #1a1a1a;
+    --card: #ffffff;
+    --border: rgba(0,0,0,0.08);
+    --tag-bg: #0e0e0e;
+    --tag-fg: #f5f4f0;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    overflow-x: hidden;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    padding: 20px 60px;
+    display: flex; justify-content: space-between; align-items: center;
+    backdrop-filter: blur(20px);
+    background: rgba(245,244,240,0.85);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-logo {
+    font-family: 'DM Mono', monospace;
+    font-size: 13px; letter-spacing: 0.08em; color: var(--ink);
+  }
+  .nav-links { display: flex; gap: 36px; list-style: none; }
+  .nav-links a {
+    font-size: 13px; font-weight: 400; color: var(--ink2);
+    text-decoration: none; letter-spacing: 0.04em;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--ink); }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: flex; flex-direction: column; justify-content: center; align-items: center;
+    text-align: center;
+    padding: 120px 40px 80px;
+    position: relative;
+  }
+
+  .hero-eyebrow {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px; letter-spacing: 0.15em; color: var(--ink3);
+    text-transform: uppercase;
+    margin-bottom: 28px;
+    opacity: 0; animation: fadeUp 0.8s 0.2s forwards;
+  }
+
+  h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(52px, 8vw, 110px);
+    font-weight: 700;
+    line-height: 1.0;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+    margin-bottom: 28px;
+    opacity: 0; animation: fadeUp 0.8s 0.4s forwards;
+  }
+
+  .hero-sub {
+    font-size: 17px; font-weight: 300;
+    color: var(--ink2); max-width: 520px;
+    line-height: 1.7;
+    margin-bottom: 56px;
+    opacity: 0; animation: fadeUp 0.8s 0.6s forwards;
+  }
+
+  .hero-btns {
+    display: flex; gap: 16px; flex-wrap: wrap; justify-content: center;
+    opacity: 0; animation: fadeUp 0.8s 0.8s forwards;
+  }
+
+  .btn {
+    padding: 14px 32px; font-size: 14px; font-weight: 500;
+    border-radius: 50px; cursor: pointer; text-decoration: none;
+    transition: all 0.25s; letter-spacing: 0.03em;
+    display: inline-block;
+  }
+  .btn-dark { background: var(--ink); color: #fff; border: 2px solid var(--ink); }
+  .btn-dark:hover { background: #333; border-color: #333; transform: translateY(-2px); }
+  .btn-outline { background: transparent; color: var(--ink); border: 2px solid var(--ink); }
+  .btn-outline:hover { background: var(--ink); color: #fff; transform: translateY(-2px); }
+
+  .scroll-hint {
+    position: absolute; bottom: 40px;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px; color: var(--ink3); letter-spacing: 0.1em;
+    display: flex; flex-direction: column; align-items: center; gap: 10px;
+    opacity: 0; animation: fadeUp 1s 1.2s forwards;
+  }
+  .scroll-line {
+    width: 1px; height: 50px;
+    background: linear-gradient(to bottom, var(--ink3), transparent);
+    animation: scrollPulse 2s infinite;
+  }
+
+  /* SECTIONS */
+  section { padding: 120px 60px; max-width: 1200px; margin: 0 auto; }
+
+  .section-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px; letter-spacing: 0.18em; color: var(--ink3);
+    text-transform: uppercase; margin-bottom: 16px;
+  }
+
+  h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(36px, 5vw, 64px);
+    font-weight: 700; line-height: 1.1;
+    letter-spacing: -0.02em;
+    margin-bottom: 48px;
+  }
+
+  /* ABOUT */
+  .about-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 80px;
+    align-items: center;
+  }
+  .about-text p {
+    font-size: 18px; font-weight: 300; line-height: 1.8;
+    color: var(--ink2); margin-bottom: 20px;
+  }
+  .about-text p strong { color: var(--ink); font-weight: 500; }
+  .about-stats {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 24px;
+  }
+  .stat-card {
+    background: var(--card); padding: 28px;
+    border-radius: 16px; border: 1px solid var(--border);
+    box-shadow: 0 2px 20px rgba(0,0,0,0.04);
+  }
+  .stat-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 42px; font-weight: 700; color: var(--ink);
+    line-height: 1;
+  }
+  .stat-label {
+    font-size: 13px; color: var(--ink3); margin-top: 6px;
+  }
+
+  /* PROJECTS */
+  .projects-full { max-width: 1200px; margin: 0 auto; padding: 0 60px 120px; }
+  .projects-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 24px;
+  }
+  .project-card {
+    background: var(--card);
+    border-radius: 20px; padding: 36px;
+    border: 1px solid var(--border);
+    box-shadow: 0 4px 30px rgba(0,0,0,0.05);
+    transition: transform 0.3s, box-shadow 0.3s;
+    position: relative; overflow: hidden;
+  }
+  .project-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.12);
+  }
+  .project-card.featured {
+    grid-column: span 2;
+    background: var(--ink); color: #fff;
+  }
+  .project-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px; color: var(--ink3); letter-spacing: 0.12em;
+    margin-bottom: 20px;
+  }
+  .project-card.featured .project-num { color: rgba(255,255,255,0.4); }
+  .project-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 26px; font-weight: 700;
+    margin-bottom: 12px; line-height: 1.2;
+  }
+  .project-desc {
+    font-size: 15px; font-weight: 300; line-height: 1.7;
+    color: var(--ink2); margin-bottom: 28px;
+  }
+  .project-card.featured .project-desc { color: rgba(255,255,255,0.65); }
+  .project-tags { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 28px; }
+  .tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px; padding: 6px 12px;
+    border-radius: 50px; letter-spacing: 0.06em;
+    background: var(--tag-bg); color: var(--tag-fg);
+  }
+  .project-card.featured .tag {
+    background: rgba(255,255,255,0.15); color: #fff;
+  }
+  .project-links { display: flex; gap: 12px; }
+  .project-link {
+    font-size: 13px; font-weight: 500; color: var(--ink2);
+    text-decoration: none; letter-spacing: 0.04em;
+    display: flex; align-items: center; gap: 6px;
+    transition: color 0.2s;
+  }
+  .project-link:hover { color: var(--ink); }
+  .project-card.featured .project-link { color: rgba(255,255,255,0.6); }
+  .project-card.featured .project-link:hover { color: #fff; }
+
+  /* SKILLS */
+  .skills-full { max-width: 1200px; margin: 0 auto; padding: 0 60px 120px; }
+  .skills-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+  .skill-group {
+    background: var(--card); border-radius: 20px; padding: 36px;
+    border: 1px solid var(--border);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.04);
+  }
+  .skill-group-title {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px; letter-spacing: 0.14em; color: var(--ink3);
+    text-transform: uppercase; margin-bottom: 20px;
+  }
+  .skill-items { display: flex; flex-direction: column; gap: 12px; }
+  .skill-item {
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .skill-name { font-size: 15px; font-weight: 400; }
+  .skill-bar-wrap {
+    width: 80px; height: 3px;
+    background: var(--border); border-radius: 2px; overflow: hidden;
+  }
+  .skill-bar {
+    height: 100%; background: var(--ink); border-radius: 2px;
+    transform-origin: left; animation: growBar 1s ease forwards;
+    transform: scaleX(0);
+  }
+
+  /* EXPERIENCE */
+  .experience-full { max-width: 1200px; margin: 0 auto; padding: 0 60px 120px; }
+  .timeline { position: relative; padding-left: 40px; }
+  .timeline::before {
+    content: ''; position: absolute;
+    left: 0; top: 8px; bottom: 8px;
+    width: 1px; background: var(--border);
+  }
+  .timeline-item {
+    position: relative; margin-bottom: 60px;
+  }
+  .timeline-dot {
+    position: absolute; left: -44px; top: 6px;
+    width: 10px; height: 10px;
+    border-radius: 50%; background: var(--ink);
+    border: 3px solid var(--bg);
+  }
+  .timeline-year {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px; color: var(--ink3); letter-spacing: 0.12em;
+    margin-bottom: 8px;
+  }
+  .timeline-role {
+    font-family: 'Playfair Display', serif;
+    font-size: 24px; font-weight: 700; margin-bottom: 4px;
+  }
+  .timeline-company {
+    font-size: 14px; font-weight: 500; color: var(--ink3);
+    margin-bottom: 12px;
+  }
+  .timeline-desc {
+    font-size: 15px; font-weight: 300; line-height: 1.7;
+    color: var(--ink2); max-width: 560px;
+  }
+
+  /* CERTS */
+  .certs-full { max-width: 1200px; margin: 0 auto; padding: 0 60px 120px; }
+  .certs-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
+  .cert-card {
+    background: var(--card); border-radius: 20px; padding: 36px;
+    border: 1px solid var(--border);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.04);
+    display: flex; align-items: flex-start; gap: 24px;
+    transition: transform 0.3s;
+  }
+  .cert-card:hover { transform: translateY(-4px); }
+  .cert-icon {
+    width: 52px; height: 52px; border-radius: 14px;
+    background: var(--ink); color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'DM Mono', monospace;
+    font-size: 13px; font-weight: 500; flex-shrink: 0;
+  }
+  .cert-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px; font-weight: 700; margin-bottom: 4px;
+  }
+  .cert-provider { font-size: 13px; color: var(--ink3); margin-bottom: 8px; }
+  .cert-badge {
+    display: inline-block;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px; letter-spacing: 0.1em;
+    padding: 4px 10px; border-radius: 50px;
+    background: #e8f5e9; color: #2e7d32;
+  }
+
+  /* CONTACT */
+  .contact-section {
+    padding: 120px 60px;
+    max-width: 1200px; margin: 0 auto;
+    text-align: center;
+  }
+  .contact-section h2 { margin-bottom: 16px; }
+  .contact-sub {
+    font-size: 18px; font-weight: 300; color: var(--ink2);
+    margin-bottom: 56px;
+  }
+  .contact-links {
+    display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;
+    margin-bottom: 80px;
+  }
+  .contact-link {
+    display: flex; align-items: center; gap: 10px;
+    padding: 16px 28px; border-radius: 50px;
+    background: var(--card); border: 1px solid var(--border);
+    text-decoration: none; color: var(--ink);
+    font-size: 14px; font-weight: 500;
+    transition: all 0.25s;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+  }
+  .contact-link:hover {
+    background: var(--ink); color: #fff;
+    transform: translateY(-3px);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.15);
+  }
+
+  /* FOOTER */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 32px 60px;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .footer-text {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px; color: var(--ink3);
+  }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes scrollPulse {
+    0%, 100% { opacity: 0.3; }
+    50% { opacity: 1; }
+  }
+  @keyframes growBar {
+    to { transform: scaleX(1); }
+  }
+
+  .reveal {
+    opacity: 0; transform: translateY(30px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .reveal.visible {
+    opacity: 1; transform: translateY(0);
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 900px) {
+    nav { padding: 16px 24px; }
+    .nav-links { display: none; }
+    section, .projects-full, .skills-full, .experience-full, .certs-full, .contact-section { padding-left: 24px; padding-right: 24px; }
+    .about-grid { grid-template-columns: 1fr; gap: 48px; }
+    .projects-grid { grid-template-columns: 1fr; }
+    .project-card.featured { grid-column: span 1; }
+    .skills-grid { grid-template-columns: 1fr; }
+    .certs-grid { grid-template-columns: 1fr; }
+    footer { padding: 24px; flex-direction: column; gap: 12px; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">SUJAY.DEV</div>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-eyebrow">IT Student · Developer · Problem Solver</div>
+  <h1>Sujay<br>Shrestha</h1>
+  <p class="hero-sub">Building practical tech that solves real problems. Based in Sydney, studying at Australian Catholic University. Graduating Nov 2026.</p>
+  <div class="hero-btns">
+    <a href="#projects" class="btn btn-dark">View Projects</a>
+    <a href="#contact" class="btn btn-outline">Get In Touch</a>
+  </div>
+  <div class="scroll-hint">
+    <span>scroll</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="section-label">// about me</div>
+  <div class="about-grid">
+    <div class="about-text">
+      <h2>Building things<br>that matter.</h2>
+      <p>IT student focused on <strong>cloud, software, and real-world solutions</strong>. I don't just study tech — I apply it. From supporting POS systems at a fruit shop to building websites for businesses, I bring a practical edge most students don't have.</p>
+      <p>I enjoy building tools that make work easier, systems smarter, and experiences cleaner.</p>
+    </div>
+    <div class="about-stats">
+      <div class="stat-card reveal">
+        <div class="stat-num">2+</div>
+        <div class="stat-label">Years real-world experience</div>
+      </div>
+      <div class="stat-card reveal">
+        <div class="stat-num">2</div>
+        <div class="stat-label">Microsoft Certifications</div>
+      </div>
+      <div class="stat-card reveal">
+        <div class="stat-num">5+</div>
+        <div class="stat-label">Technologies mastered</div>
+      </div>
+      <div class="stat-card reveal">
+        <div class="stat-num">Nov<br><span style="font-size:22px">2026</span></div>
+        <div class="stat-label">Graduation — ACU Sydney</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<div class="projects-full" id="projects">
+  <div class="section-label">// featured projects</div>
+  <h2>Things I've built.</h2>
+  <div class="projects-grid">
+
+    <div class="project-card featured reveal">
+      <div class="project-num">01 — FEATURED</div>
+      <div class="project-title">Store Busy Predictor</div>
+      <p class="project-desc">Predicts customer traffic using historical data trends. Helps store managers optimise staffing and operations by anticipating peak periods before they happen.</p>
+      <div class="project-tags">
+        <span class="tag">Python</span>
+        <span class="tag">Machine Learning</span>
+        <span class="tag">Data Analysis</span>
+        <span class="tag">Pandas</span>
+      </div>
+      <div class="project-links">
+        <a href="#" class="project-link">↗ Live Demo</a>
+        <a href="#" class="project-link">⌥ GitHub</a>
+      </div>
+    </div>
+
+    <div class="project-card reveal">
+      <div class="project-num">02</div>
+      <div class="project-title">Apple-Style File Manager</div>
+      <p class="project-desc">A clean, intuitive file management app inspired by Apple's design language. Built with JavaFX for desktop use with smooth animations and a minimal UI.</p>
+      <div class="project-tags">
+        <span class="tag">Java</span>
+        <span class="tag">JavaFX</span>
+        <span class="tag">OOP</span>
+      </div>
+      <div class="project-links">
+        <a href="#" class="project-link">↗ View Project</a>
+        <a href="#" class="project-link">⌥ GitHub</a>
+      </div>
+    </div>
+
+    <div class="project-card reveal">
+      <div class="project-num">03</div>
+      <div class="project-title">Sanjay Textile Website</div>
+      <p class="project-desc">Full business website for a textile company. Designed and developed from scratch — clean product showcase, contact system, and mobile-responsive layout.</p>
+      <div class="project-tags">
+        <span class="tag">HTML</span>
+        <span class="tag">CSS</span>
+        <span class="tag">JavaScript</span>
+      </div>
+      <div class="project-links">
+        <a href="#" class="project-link">↗ Live Site</a>
+        <a href="#" class="project-link">⌥ GitHub</a>
+      </div>
+    </div>
+
+    <div class="project-card reveal">
+      <div class="project-num">04</div>
+      <div class="project-title">Power Platform Automation</div>
+      <p class="project-desc">Business process automation using Microsoft Power Apps and Power Automate. Reduced manual data entry time for a small business workflow by 60%.</p>
+      <div class="project-tags">
+        <span class="tag">Power Apps</span>
+        <span class="tag">Power Automate</span>
+        <span class="tag">Azure</span>
+      </div>
+      <div class="project-links">
+        <a href="#" class="project-link">↗ Case Study</a>
+      </div>
+    </div>
+
+    <div class="project-card reveal">
+      <div class="project-num">05</div>
+      <div class="project-title">Mini Games Suite</div>
+      <p class="project-desc">A collection of browser-based games built with vanilla JavaScript — including an Apple-inspired puzzle game and a classic memory match. Clean UI, no frameworks.</p>
+      <div class="project-tags">
+        <span class="tag">JavaScript</span>
+        <span class="tag">HTML5</span>
+        <span class="tag">CSS3</span>
+      </div>
+      <div class="project-links">
+        <a href="#" class="project-link">↗ Play Now</a>
+        <a href="#" class="project-link">⌥ GitHub</a>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- SKILLS -->
+<div class="skills-full" id="skills">
+  <div class="section-label">// technical skills</div>
+  <h2>What I work with.</h2>
+  <div class="skills-grid">
+    <div class="skill-group reveal">
+      <div class="skill-group-title">Languages</div>
+      <div class="skill-items">
+        <div class="skill-item">
+          <span class="skill-name">Python</span>
+          <div class="skill-bar-wrap"><div class="skill-bar" style="width:85%"></div></div>
+        </div>
+        <div class="skill-item">
+          <span class="skill-name">Java</span>
+          <div class="skill-bar-wrap"><div class="skill-bar" style="width:75%"></div></div>
+        </div>
+        <div class="skill-item">
+          <span class="skill-name">JavaScript</span>
+          <div class="skill-bar-wrap"><div class="skill-bar" style="width:75%"></div></div>
+        </div>
+        <div class="skill-item">
+          <span class="skill-name">HTML & CSS</span>
+          <div class="skill-bar-wrap"><div class="skill-bar" style="width:85%"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="skill-group reveal">
+      <div class="skill-group-title">Cloud & Platforms</div>
+      <div class="skill-items">
+        <div class="skill-item">
+          <span class="skill-name">Microsoft Azure</span>
+          <div class="skill-bar-wrap"><div class="skill-bar" style="width:70%"></div></div>
+        </div>
+        <div class="skill-item">
+          <span class="skill-name">Power Platform</span>
+          <div class="skill-bar-wrap"><div class="skill-bar" style="width:75%"></div></div>
+        </div>
+        <div class="skill-item">
+          <span class="skill-name">Power Apps</span>
+          <div class="skill-bar-wrap"><div class="skill-bar" style="width:70%"></div></div>
+        </div>
+        <div class="skill-item">
+          <span class="skill-name">Power Automate</span>
+          <div class="skill-bar-wrap"><div class="skill-bar" style="width:65%"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="skill-group reveal">
+      <div class="skill-group-title">Tools & Other</div>
+      <div class="skill-items">
+        <div class="skill-item">
+          <span class="skill-name">Excel / Sheets</span>
+          <div class="skill-bar-wrap"><div class="skill-bar" style="width:90%"></div></div>
+        </div>
+        <div class="skill-item">
+          <span class="skill-name">JavaFX</span>
+          <div class="skill-bar-wrap"><div class="skill-bar" style="width:70%"></div></div>
+        </div>
+        <div class="skill-item">
+          <span class="skill-name">IT Support</span>
+          <div class="skill-bar-wrap"><div class="skill-bar" style="width:85%"></div></div>
+        </div>
+        <div class="skill-item">
+          <span class="skill-name">Git</span>
+          <div class="skill-bar-wrap"><div class="skill-bar" style="width:65%"></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- EXPERIENCE -->
+<div class="experience-full" id="experience">
+  <div class="section-label">// experience</div>
+  <h2>Where I've worked.</h2>
+  <div class="timeline">
+
+    <div class="timeline-item reveal">
+      <div class="timeline-dot"></div>
+      <div class="timeline-year">2024 — PRESENT</div>
+      <div class="timeline-role">Assistant Manager</div>
+      <div class="timeline-company">Sanjay Textile, Sydney</div>
+      <p class="timeline-desc">Managed day-to-day operations, oversaw staff coordination, and led tech troubleshooting initiatives. Built and maintained the company's website as part of a broader digital transformation.</p>
+    </div>
+
+    <div class="timeline-item reveal">
+      <div class="timeline-dot"></div>
+      <div class="timeline-year">2023 — 2024</div>
+      <div class="timeline-role">IT Support Assistant</div>
+      <div class="timeline-company">Grima Brothers Fruit Shop, Sydney</div>
+      <p class="timeline-desc">Provided frontline IT support for POS systems, devices, and network issues. Diagnosed hardware and software faults, ensuring minimal downtime across business operations.</p>
+    </div>
+
+    <div class="timeline-item reveal">
+      <div class="timeline-dot"></div>
+      <div class="timeline-year">2022 — ONGOING</div>
+      <div class="timeline-role">Freelance Digital Designer</div>
+      <div class="timeline-company">Self-employed</div>
+      <p class="timeline-desc">Designed and delivered digital assets, website layouts, and branded materials for small businesses. Combined aesthetic sensibility with technical execution.</p>
+    </div>
+
+    <div class="timeline-item reveal">
+      <div class="timeline-dot"></div>
+      <div class="timeline-year">2023 — PRESENT</div>
+      <div class="timeline-role">Bachelor of Information Technology</div>
+      <div class="timeline-company">Australian Catholic University · Graduating Nov 2026</div>
+      <p class="timeline-desc">Studying software development, cloud computing, systems analysis, and IT project management. Actively applying coursework to real-world projects.</p>
+    </div>
+
+  </div>
+</div>
+
+<!-- CERTIFICATIONS -->
+<div class="certs-full" id="certifications">
+  <div class="section-label">// certifications</div>
+  <h2>Verified skills.</h2>
+  <div class="certs-grid">
+    <div class="cert-card reveal">
+      <div class="cert-icon">AZ</div>
+      <div>
+        <div class="cert-title">Azure Fundamentals</div>
+        <div class="cert-provider">Microsoft · AZ-900</div>
+        <span class="cert-badge">✓ Certified</span>
+      </div>
+    </div>
+    <div class="cert-card reveal">
+      <div class="cert-icon">PL</div>
+      <div>
+        <div class="cert-title">Power Platform Fundamentals</div>
+        <div class="cert-provider">Microsoft · PL-900</div>
+        <span class="cert-badge">✓ Certified</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CONTACT -->
+<div class="contact-section" id="contact">
+  <div class="section-label">// contact</div>
+  <h2>Let's connect.</h2>
+  <p class="contact-sub">Open to internships, part-time roles, and interesting collaborations. I reply fast.</p>
+  <div class="contact-links">
+    <a href="mailto:sujay@email.com" class="contact-link">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+      sujay@email.com
+    </a>
+    <a href="#" class="contact-link">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+      LinkedIn
+    </a>
+    <a href="#" class="contact-link">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+      GitHub
+    </a>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-text">© 2025 Sujay Shrestha</div>
+  <div class="footer-text">Built with care · Sydney, AU</div>
+</footer>
+
+<script>
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => entry.target.classList.add('visible'), i * 80);
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1 });
+  reveals.forEach(el => observer.observe(el));
+
+  // Skill bars trigger on scroll
+  const skillBars = document.querySelectorAll('.skill-bar');
+  const barObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.style.animationPlayState = 'running';
+        barObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.3 });
+  skillBars.forEach(bar => {
+    bar.style.animationPlayState = 'paused';
+    barObserver.observe(bar);
+  });
+</script>
+</body>
+</html>
